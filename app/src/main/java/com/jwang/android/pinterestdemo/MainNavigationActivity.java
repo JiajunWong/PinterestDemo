@@ -2,25 +2,25 @@ package com.jwang.android.pinterestdemo;
 
 import java.util.ArrayList;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 
+import com.jwang.android.pinterestdemo.activity.BaseActivity;
 import com.jwang.android.pinterestdemo.adapter.PinAdapter;
 import com.jwang.android.pinterestdemo.interfaces.OnRequestPinResultListener;
 import com.jwang.android.pinterestdemo.model.ModelPin;
 import com.jwang.android.pinterestdemo.task.RequestUserPinTask;
 
-public class MainNavigationActivity extends AppCompatActivity
+public class MainNavigationActivity extends BaseActivity
 {
     private static final String SELECTED_KEY = "selected_position";
     private int mPosition = ListView.INVALID_POSITION;
@@ -58,7 +58,20 @@ public class MainNavigationActivity extends AppCompatActivity
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        requestUserPin("sukekiyo");
+        setupToolBar();
+    }
+
+    private void setupToolBar()
+    {
+        mToolbar.findViewById(R.id.search_pin).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                String username = ((EditText) mToolbar.findViewById(R.id.et_username)).getText().toString();
+                requestUserPin(username);
+            }
+        });
     }
 
     private OnRequestPinResultListener mOnRequestPinResultListener = new OnRequestPinResultListener()
@@ -100,20 +113,7 @@ public class MainNavigationActivity extends AppCompatActivity
     {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem searchItem = menu.findItem(R.id.search);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView = null;
-        if (searchItem != null)
-        {
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if (searchView != null)
-        {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
