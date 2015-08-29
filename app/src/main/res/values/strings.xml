@@ -8,4 +8,7 @@
     <string name="transition_name_user" translatable="false">mediaTransition</string>
     <string name="transition_name_media" translatable="false">mediaTransition</string>
 
+    <!-- Main Activity -->
+    <string name="tap_search">Tap username to search pin</string>
+    <string name="search_empty">No result for this user</string>
 </resources>

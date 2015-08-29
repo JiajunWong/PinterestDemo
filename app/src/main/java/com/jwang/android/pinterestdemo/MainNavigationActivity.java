@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jwang.android.pinterestdemo.activity.BaseActivity;
 import com.jwang.android.pinterestdemo.adapter.PinAdapter;
@@ -26,6 +27,7 @@ public class MainNavigationActivity extends BaseActivity
     private int mPosition = ListView.INVALID_POSITION;
 
     private RecyclerView mRecyclerView;
+    private TextView mErrorTextView;
     private PinAdapter mPinAdapter;
     private RequestUserPinTask mRequestUserPinTask;
 
@@ -37,6 +39,7 @@ public class MainNavigationActivity extends BaseActivity
 
         mPinAdapter = new PinAdapter(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.lv_medias);
+        mErrorTextView = (TextView) findViewById(R.id.tv_error);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -79,6 +82,17 @@ public class MainNavigationActivity extends BaseActivity
         @Override
         public void onResult(ArrayList<ModelPin> arrayList)
         {
+            if (arrayList.size() == 0)
+            {
+                mRecyclerView.setVisibility(View.GONE);
+                mErrorTextView.setVisibility(View.VISIBLE);
+                mErrorTextView.setText(getString(R.string.search_empty));
+            }
+            else
+            {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mErrorTextView.setVisibility(View.GONE);
+            }
             mPinAdapter.setModelPins(arrayList);
             mPinAdapter.notifyDataSetChanged();
             if (mPosition != ListView.INVALID_POSITION)
