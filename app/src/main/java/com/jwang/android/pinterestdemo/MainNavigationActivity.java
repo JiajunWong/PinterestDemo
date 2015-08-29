@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,9 @@ import com.jwang.android.pinterestdemo.task.RequestUserPinTask;
 public class MainNavigationActivity extends BaseActivity
 {
     private static final String SELECTED_KEY = "selected_position";
+    private static final String USERNAME_KEY = "username";
     private int mPosition = ListView.INVALID_POSITION;
+    private String mUsername;
 
     private RecyclerView mRecyclerView;
     private TextView mErrorTextView;
@@ -49,19 +52,35 @@ public class MainNavigationActivity extends BaseActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mPinAdapter);
 
+        setupToolBar();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
         // If there's instance state, mine it for useful information.
         // The end-goal here is that the user never knows that turning their device sideways
         // does crazy lifecycle related things.  It should feel like some stuff stretched out,
         // or magically appeared to take advantage of room, but data or place in the app was never
         // actually *lost*.
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY))
+        if (savedInstanceState != null)
         {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            if (savedInstanceState.containsKey(SELECTED_KEY))
+            {
+                // The listview probably hasn't even been populated yet.  Actually perform the
+                // swapout in onLoadFinished.
+                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            }
+            if (savedInstanceState.containsKey(USERNAME_KEY))
+            {
+                mUsername = savedInstanceState.getString(USERNAME_KEY);
+                if (!TextUtils.isEmpty(mUsername))
+                {
+                    requestUserPin(mUsername);
+                }
+            }
         }
-
-        setupToolBar();
     }
 
     private void setupToolBar()
@@ -118,6 +137,12 @@ public class MainNavigationActivity extends BaseActivity
         if (mPosition != ListView.INVALID_POSITION)
         {
             outState.putInt(SELECTED_KEY, mPosition);
+        }
+
+        String username = ((EditText) mToolbar.findViewById(R.id.et_username)).getText().toString();
+        if (!TextUtils.isEmpty(username))
+        {
+            outState.putString(USERNAME_KEY, username);
         }
         super.onSaveInstanceState(outState);
     }
