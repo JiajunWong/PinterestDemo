@@ -3,6 +3,7 @@ package com.jwang.android.demo;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
@@ -11,17 +12,21 @@ import android.widget.ListView;
 
 import com.jwang.android.demo.activity.BaseActivity;
 import com.jwang.android.demo.adapter.DemoAdapter;
+import com.jwang.android.demo.interfaces.MainNavigationPresenter;
+import com.jwang.android.demo.interfaces.MainNavigationView;
 import com.jwang.android.demo.interfaces.OnRequestResultListener;
 import com.jwang.android.demo.task.FetchImageTask;
 
-public class MainNavigationActivity extends BaseActivity
+public class MainNavigationActivity extends BaseActivity implements
+        MainNavigationView
 {
     private static final String SELECTED_KEY = "selected_position";
     private int mPosition = ListView.INVALID_POSITION;
 
     private RecyclerView mRecyclerView;
     private DemoAdapter mDemoAdapter;
-    private FetchImageTask mRequestTask;
+
+    private MainNavigationPresenter mMainNavigationPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,13 +41,18 @@ public class MainNavigationActivity extends BaseActivity
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.column_count), StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDemoAdapter);
 
-        mRequestTask = new FetchImageTask(this);
-        mRequestTask.setOnRequestPinResultListener(mOnRequestResultListener);
-        mRequestTask.execute();
+        mMainNavigationPresenter = new MainNavigationPresenterImp(this, this);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mMainNavigationPresenter.onResume();
     }
 
     @Override
@@ -65,19 +75,16 @@ public class MainNavigationActivity extends BaseActivity
         }
     }
 
-    private OnRequestResultListener mOnRequestResultListener = new OnRequestResultListener()
+    @Override
+    public void setItem(ArrayList<String> arrayList)
     {
-        @Override
-        public void onResult(ArrayList<String> arrayList)
+        mDemoAdapter.setCollections(arrayList);
+        mDemoAdapter.notifyDataSetChanged();
+        if (mPosition != ListView.INVALID_POSITION)
         {
-            mDemoAdapter.setCollections(arrayList);
-            mDemoAdapter.notifyDataSetChanged();
-            if (mPosition != ListView.INVALID_POSITION)
-            {
-                mRecyclerView.scrollToPosition(mPosition);
-            }
+            mRecyclerView.scrollToPosition(mPosition);
         }
-    };
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState)
