@@ -6,18 +6,18 @@ import android.content.Context;
 /**
  * Created by jiajunwang on 8/28/15.
  */
-public class PinterestDemoApplication extends Application
+public class WeatherDemoApplication extends Application
 {
-    private static PinterestDemoApplication sInstance;
+    private static WeatherDemoApplication sInstance;
     private Context mContext;
 
-    public PinterestDemoApplication()
+    public WeatherDemoApplication()
     {
         super();
         sInstance = this;
     }
 
-    public static PinterestDemoApplication getInstance()
+    public static WeatherDemoApplication getInstance()
     {
         return sInstance;
     }

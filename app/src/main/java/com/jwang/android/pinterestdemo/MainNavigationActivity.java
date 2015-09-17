@@ -3,10 +3,7 @@ package com.jwang.android.pinterestdemo;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -17,22 +14,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jwang.android.pinterestdemo.activity.BaseActivity;
-import com.jwang.android.pinterestdemo.adapter.PinAdapter;
-import com.jwang.android.pinterestdemo.interfaces.OnRequestPinResultListener;
-import com.jwang.android.pinterestdemo.model.ModelPin;
-import com.jwang.android.pinterestdemo.task.RequestUserPinTask;
+import com.jwang.android.pinterestdemo.adapter.WeatherAdapter;
+import com.jwang.android.pinterestdemo.interfaces.OnRequestWeatherResultListener;
+import com.jwang.android.pinterestdemo.task.FetchWeatherTask;
 
 public class MainNavigationActivity extends BaseActivity
 {
     private static final String SELECTED_KEY = "selected_position";
     private static final String USERNAME_KEY = "username";
     private int mPosition = ListView.INVALID_POSITION;
-    private String mUsername;
 
     private RecyclerView mRecyclerView;
-    private TextView mErrorTextView;
-    private PinAdapter mPinAdapter;
-    private RequestUserPinTask mRequestUserPinTask;
+    private WeatherAdapter mWeatherAdapter;
+    private FetchWeatherTask mRequestUserPinTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,9 +34,8 @@ public class MainNavigationActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPinAdapter = new PinAdapter(this);
+        mWeatherAdapter = new WeatherAdapter();
         mRecyclerView = (RecyclerView) findViewById(R.id.lv_medias);
-        mErrorTextView = (TextView) findViewById(R.id.tv_error);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -50,9 +43,11 @@ public class MainNavigationActivity extends BaseActivity
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.column_count), StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mPinAdapter);
+        mRecyclerView.setAdapter(mWeatherAdapter);
 
-        setupToolBar();
+        mRequestUserPinTask = new FetchWeatherTask(this);
+        mRequestUserPinTask.setOnRequestPinResultListener(mOnRequestWeatherResultListener);
+        mRequestUserPinTask.execute();
     }
 
     @Override
@@ -72,61 +67,22 @@ public class MainNavigationActivity extends BaseActivity
                 // swapout in onLoadFinished.
                 mPosition = savedInstanceState.getInt(SELECTED_KEY);
             }
-            if (savedInstanceState.containsKey(USERNAME_KEY))
-            {
-                mUsername = savedInstanceState.getString(USERNAME_KEY);
-                if (!TextUtils.isEmpty(mUsername))
-                {
-                    requestUserPin(mUsername);
-                }
-            }
         }
     }
 
-    private void setupToolBar()
-    {
-        mToolbar.findViewById(R.id.search_pin).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                String username = ((EditText) mToolbar.findViewById(R.id.et_username)).getText().toString();
-                requestUserPin(username);
-            }
-        });
-    }
-
-    private OnRequestPinResultListener mOnRequestPinResultListener = new OnRequestPinResultListener()
+    private OnRequestWeatherResultListener mOnRequestWeatherResultListener = new OnRequestWeatherResultListener()
     {
         @Override
-        public void onResult(ArrayList<ModelPin> arrayList)
+        public void onResult(ArrayList<String> arrayList)
         {
-            if (arrayList.size() == 0)
-            {
-                mRecyclerView.setVisibility(View.GONE);
-                mErrorTextView.setVisibility(View.VISIBLE);
-                mErrorTextView.setText(getString(R.string.search_empty));
-            }
-            else
-            {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mErrorTextView.setVisibility(View.GONE);
-            }
-            mPinAdapter.setModelPins(arrayList);
-            mPinAdapter.notifyDataSetChanged();
+            mWeatherAdapter.setModelPins(arrayList);
+            mWeatherAdapter.notifyDataSetChanged();
             if (mPosition != ListView.INVALID_POSITION)
             {
                 mRecyclerView.scrollToPosition(mPosition);
             }
         }
     };
-
-    private void requestUserPin(String username)
-    {
-        mRequestUserPinTask = new RequestUserPinTask(this);
-        mRequestUserPinTask.setOnRequestPinResultListener(mOnRequestPinResultListener);
-        mRequestUserPinTask.execute(username);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState)
@@ -139,11 +95,6 @@ public class MainNavigationActivity extends BaseActivity
             outState.putInt(SELECTED_KEY, mPosition);
         }
 
-        String username = ((EditText) mToolbar.findViewById(R.id.et_username)).getText().toString();
-        if (!TextUtils.isEmpty(username))
-        {
-            outState.putString(USERNAME_KEY, username);
-        }
         super.onSaveInstanceState(outState);
     }
 
