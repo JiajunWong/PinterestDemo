@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by jiajunwang on 8/28/15.
  */
-public interface OnRequestWeatherResultListener
+public interface OnRequestResultListener
 {
-    public static final OnRequestWeatherResultListener NO_OP = new OnRequestWeatherResultListener()
+    public static final OnRequestResultListener NO_OP = new OnRequestResultListener()
     {
         @Override
         public void onResult(ArrayList<String> arrayList)

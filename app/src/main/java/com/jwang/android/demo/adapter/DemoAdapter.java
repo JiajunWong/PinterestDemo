@@ -14,8 +14,7 @@ import com.jwang.android.demo.R;
 /**
  * Created by jiajunwang on 8/28/15.
  */
-public class DemoAdapter extends
-        RecyclerView.Adapter<DemoAdapter.ViewHolder>
+public class DemoAdapter extends RecyclerView.Adapter<DemoAdapter.ViewHolder>
 {
     private ArrayList<String> mTemps = new ArrayList<>();
 
@@ -23,7 +22,7 @@ public class DemoAdapter extends
     {
     }
 
-    public void setModelPins(ArrayList<String> temps)
+    public void setCollections(ArrayList<String> temps)
     {
         mTemps = temps;
     }
@@ -33,7 +32,7 @@ public class DemoAdapter extends
     {
         if (viewGroup instanceof RecyclerView)
         {
-            int layoutId = R.layout.list_item_media;
+            int layoutId = R.layout.list_item;
             View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutId, viewGroup, false);
             view.setFocusable(true);
             return new ViewHolder(view);

@@ -11,8 +11,8 @@ import android.widget.ListView;
 
 import com.jwang.android.demo.activity.BaseActivity;
 import com.jwang.android.demo.adapter.DemoAdapter;
-import com.jwang.android.demo.interfaces.OnRequestWeatherResultListener;
-import com.jwang.android.demo.task.FetchWeatherTask;
+import com.jwang.android.demo.interfaces.OnRequestResultListener;
+import com.jwang.android.demo.task.FetchImageTask;
 
 public class MainNavigationActivity extends BaseActivity
 {
@@ -21,7 +21,7 @@ public class MainNavigationActivity extends BaseActivity
 
     private RecyclerView mRecyclerView;
     private DemoAdapter mDemoAdapter;
-    private FetchWeatherTask mRequestUserPinTask;
+    private FetchImageTask mRequestTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,9 +40,9 @@ public class MainNavigationActivity extends BaseActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDemoAdapter);
 
-        mRequestUserPinTask = new FetchWeatherTask(this);
-        mRequestUserPinTask.setOnRequestPinResultListener(mOnRequestWeatherResultListener);
-        mRequestUserPinTask.execute();
+        mRequestTask = new FetchImageTask(this);
+        mRequestTask.setOnRequestPinResultListener(mOnRequestResultListener);
+        mRequestTask.execute();
     }
 
     @Override
@@ -65,12 +65,12 @@ public class MainNavigationActivity extends BaseActivity
         }
     }
 
-    private OnRequestWeatherResultListener mOnRequestWeatherResultListener = new OnRequestWeatherResultListener()
+    private OnRequestResultListener mOnRequestResultListener = new OnRequestResultListener()
     {
         @Override
         public void onResult(ArrayList<String> arrayList)
         {
-            mDemoAdapter.setModelPins(arrayList);
+            mDemoAdapter.setCollections(arrayList);
             mDemoAdapter.notifyDataSetChanged();
             if (mPosition != ListView.INVALID_POSITION)
             {

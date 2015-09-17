@@ -5,30 +5,30 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.jwang.android.demo.interfaces.OnRequestWeatherResultListener;
+import com.jwang.android.demo.interfaces.OnRequestResultListener;
 import com.jwang.android.demo.util.HttpRequestResultUtil;
 import com.jwang.android.demo.util.HttpRequestUtil;
 
 /**
  * Created by jiajunwang on 9/1/15.
  */
-public class FetchWeatherTask extends
+public class FetchImageTask extends
         AsyncTask<String, Void, ArrayList<String>>
 {
-    private static final String TAG = FetchWeatherTask.class.getSimpleName();
+    private static final String TAG = FetchImageTask.class.getSimpleName();
     private static final String URL = "http://api.openweathermap.org/data/2.5/forecast?q=London,us&mode=json";
 
     private Context mContext;
-    private OnRequestWeatherResultListener mOnRequestWeatherResultListener = OnRequestWeatherResultListener.NO_OP;
+    private OnRequestResultListener mOnRequestResultListener = OnRequestResultListener.NO_OP;
 
-    public FetchWeatherTask(Context context)
+    public FetchImageTask(Context context)
     {
         mContext = context;
     }
 
-    public void setOnRequestPinResultListener(OnRequestWeatherResultListener listener)
+    public void setOnRequestPinResultListener(OnRequestResultListener listener)
     {
-        mOnRequestWeatherResultListener = listener;
+        mOnRequestResultListener = listener;
     }
 
     @Override
@@ -42,6 +42,6 @@ public class FetchWeatherTask extends
     protected void onPostExecute(ArrayList<String> strings)
     {
         super.onPostExecute(strings);
-        mOnRequestWeatherResultListener.onResult(strings);
+        mOnRequestResultListener.onResult(strings);
     }
 }
