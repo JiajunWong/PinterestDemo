@@ -1,31 +1,26 @@
-package com.jwang.android.pinterestdemo;
+package com.jwang.android.demo;
 
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.jwang.android.pinterestdemo.activity.BaseActivity;
-import com.jwang.android.pinterestdemo.adapter.WeatherAdapter;
-import com.jwang.android.pinterestdemo.interfaces.OnRequestWeatherResultListener;
-import com.jwang.android.pinterestdemo.task.FetchWeatherTask;
+import com.jwang.android.demo.activity.BaseActivity;
+import com.jwang.android.demo.adapter.DemoAdapter;
+import com.jwang.android.demo.interfaces.OnRequestWeatherResultListener;
+import com.jwang.android.demo.task.FetchWeatherTask;
 
 public class MainNavigationActivity extends BaseActivity
 {
     private static final String SELECTED_KEY = "selected_position";
-    private static final String USERNAME_KEY = "username";
     private int mPosition = ListView.INVALID_POSITION;
 
     private RecyclerView mRecyclerView;
-    private WeatherAdapter mWeatherAdapter;
+    private DemoAdapter mDemoAdapter;
     private FetchWeatherTask mRequestUserPinTask;
 
     @Override
@@ -34,7 +29,7 @@ public class MainNavigationActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWeatherAdapter = new WeatherAdapter();
+        mDemoAdapter = new DemoAdapter();
         mRecyclerView = (RecyclerView) findViewById(R.id.lv_medias);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -43,7 +38,7 @@ public class MainNavigationActivity extends BaseActivity
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.column_count), StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mWeatherAdapter);
+        mRecyclerView.setAdapter(mDemoAdapter);
 
         mRequestUserPinTask = new FetchWeatherTask(this);
         mRequestUserPinTask.setOnRequestPinResultListener(mOnRequestWeatherResultListener);
@@ -75,8 +70,8 @@ public class MainNavigationActivity extends BaseActivity
         @Override
         public void onResult(ArrayList<String> arrayList)
         {
-            mWeatherAdapter.setModelPins(arrayList);
-            mWeatherAdapter.notifyDataSetChanged();
+            mDemoAdapter.setModelPins(arrayList);
+            mDemoAdapter.notifyDataSetChanged();
             if (mPosition != ListView.INVALID_POSITION)
             {
                 mRecyclerView.scrollToPosition(mPosition);

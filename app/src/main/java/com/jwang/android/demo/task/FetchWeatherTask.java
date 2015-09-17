@@ -1,13 +1,13 @@
-package com.jwang.android.pinterestdemo.task;
+package com.jwang.android.demo.task;
 
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.jwang.android.pinterestdemo.interfaces.OnRequestWeatherResultListener;
-import com.jwang.android.pinterestdemo.util.HttpRequestResultUtil;
-import com.jwang.android.pinterestdemo.util.HttpRequestUtil;
+import com.jwang.android.demo.interfaces.OnRequestWeatherResultListener;
+import com.jwang.android.demo.util.HttpRequestResultUtil;
+import com.jwang.android.demo.util.HttpRequestUtil;
 
 /**
  * Created by jiajunwang on 9/1/15.

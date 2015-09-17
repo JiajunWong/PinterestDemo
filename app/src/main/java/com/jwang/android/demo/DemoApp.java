@@ -1,4 +1,4 @@
-package com.jwang.android.pinterestdemo;
+package com.jwang.android.demo;
 
 import android.app.Application;
 import android.content.Context;
@@ -6,18 +6,18 @@ import android.content.Context;
 /**
  * Created by jiajunwang on 8/28/15.
  */
-public class WeatherDemoApplication extends Application
+public class DemoApp extends Application
 {
-    private static WeatherDemoApplication sInstance;
+    private static DemoApp sInstance;
     private Context mContext;
 
-    public WeatherDemoApplication()
+    public DemoApp()
     {
         super();
         sInstance = this;
     }
 
-    public static WeatherDemoApplication getInstance()
+    public static DemoApp getInstance()
     {
         return sInstance;
     }

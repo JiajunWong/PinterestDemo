@@ -1,4 +1,4 @@
-package com.jwang.android.pinterestdemo.activity;
+package com.jwang.android.demo.activity;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import com.jwang.android.pinterestdemo.R;
+import com.jwang.android.demo.R;
 
 /**
  * Created by jiajunwang on 8/28/15.

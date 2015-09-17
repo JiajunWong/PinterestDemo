@@ -1,8 +1,7 @@
-package com.jwang.android.pinterestdemo.adapter;
+package com.jwang.android.demo.adapter;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,19 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jwang.android.pinterestdemo.R;
-import com.jwang.android.pinterestdemo.model.ModelPin;
-import com.squareup.picasso.Picasso;
+import com.jwang.android.demo.R;
 
 /**
  * Created by jiajunwang on 8/28/15.
  */
-public class WeatherAdapter extends
-        RecyclerView.Adapter<WeatherAdapter.ViewHolder>
+public class DemoAdapter extends
+        RecyclerView.Adapter<DemoAdapter.ViewHolder>
 {
     private ArrayList<String> mTemps = new ArrayList<>();
 
-    public WeatherAdapter()
+    public DemoAdapter()
     {
     }
 

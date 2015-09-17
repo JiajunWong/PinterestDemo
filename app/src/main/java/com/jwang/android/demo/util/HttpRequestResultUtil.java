@@ -1,4 +1,4 @@
-package com.jwang.android.pinterestdemo.util;
+package com.jwang.android.demo.util;
 
 import java.util.ArrayList;
 

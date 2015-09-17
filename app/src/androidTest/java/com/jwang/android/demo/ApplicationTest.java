@@ -1,4 +1,4 @@
-package com.jwang.android.pinterestdemo;
+package com.jwang.android.demo;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
